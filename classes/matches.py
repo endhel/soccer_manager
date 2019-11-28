@@ -61,7 +61,7 @@ class Matches_dates():
     def update_record(self):
         if(self.Adversary_value.get() != "" and self.Date_value.get() != "" and self.Place_value.get() != "" and self.Tournament_value.get() != ""):
             aux = str(self.Result_value.get()).split()
-            if  len(aux) == 3 and aux[0].isnumeric and aux[2].isnumeric:
+            if  len(aux) == 3 and aux[0].isdecimal == True and aux[2].isdecimal == True:
                 try:
                     self.theCursor.execute("""UPDATE Matches SET Adversary = ?, Date = ?, Place = ?, Tournament = ?, Result = ? WHERE ID_matches = ? """, 
                     (self.Adversary_value.get(), self.Date_value.get(),  self.Place_value.get(), self.Tournament_value.get(), self.Result_value.get(), self.curItem['values'][0]))

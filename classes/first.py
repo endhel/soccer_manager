@@ -1,6 +1,5 @@
 import tkinter as tk
 from menu import Main_Window
-import pymysql
 
 class First_Window():
 
