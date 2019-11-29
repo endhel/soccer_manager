@@ -143,42 +143,44 @@ class View_player:
         self.root.destroy()
     
     def statistics(self):
+        try:
+            if(self.Position_value.get() != "" and self.Name_value.get() != "" and self.subscription_no_value.get() != "" and self.Age_value.get() != "" and self.Height_value.get() != "" and self.Weight_value.get() != ""):
+                st = tk.Toplevel()
+                st.title('Estatísticas do Jogador')
+                st['bg'] = '#4db8ff'
+                st.geometry('+500+200')
 
-        if(self.Position_value.get() != "" and self.Name_value.get() != "" and self.subscription_no_value.get() != "" and self.Age_value.get() != "" and self.Height_value.get() != "" and self.Weight_value.get() != ""):
-            st = tk.Toplevel()
-            st.title('Estatísticas do Jogador')
-            st['bg'] = '#4db8ff'
-            st.geometry('+500+200')
+                query = """SELECT SUM(Goal), SUM(Assist), SUM(Yellow_Card), SUM(Red_Card), t.Name
+                        FROM Player_Match pm, Players p, Team t
+                        WHERE p.Inscricao = ? and p.ID_player = pm.ID_player"""
 
-            query = """SELECT SUM(Goal), SUM(Assist), SUM(Yellow_Card), SUM(Red_Card), t.Name
-                       FROM Player_Match pm, Players p, Team t
-                       WHERE p.Inscricao = ? and p.ID_player = pm.ID_player"""
+                self.theCursor.execute(query, (self.subscription_no_value.get(),))
+                res = self.theCursor.fetchall()
 
-            self.theCursor.execute(query, (self.subscription_no_value.get(),))
-            res = self.theCursor.fetchall()
+                title = 'Números do Jogador pelo ' + res[0][4]
 
-            title = 'Números do Jogador pelo ' + res[0][4]
+                tk.Label(st, text=title, font='Ariel 12 bold', bg='#4db8ff', fg='white').grid(row=0, column=0, pady=20, columnspan=2, padx=5)
 
-            tk.Label(st, text=title, font='Ariel 12 bold', bg='#4db8ff', fg='white').grid(row=0, column=0, pady=20, columnspan=2, padx=5)
+                tk.Label(st, text='Nome: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=1, column=0, padx=5)
+                tk.Label(st, text=self.Name_value.get(), font='Ariel 12', bg='#4db8ff', fg='white').grid(row=1, column=1, padx=5)
+                
+                tk.Label(st, text='Gols: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=2, column=0, padx=5)
+                tk.Label(st, text=res[0][0], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=2, column=1, padx=5)
+                
+                tk.Label(st, text='Assistências: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=3, column=0, padx=5)
+                tk.Label(st, text=res[0][1], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=3, column=1, padx=5)
 
-            tk.Label(st, text='Nome: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=1, column=0, padx=5)
-            tk.Label(st, text=self.Name_value.get(), font='Ariel 12', bg='#4db8ff', fg='white').grid(row=1, column=1, padx=5)
-            
-            tk.Label(st, text='Gols: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=2, column=0, padx=5)
-            tk.Label(st, text=res[0][0], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=2, column=1, padx=5)
-            
-            tk.Label(st, text='Assistências: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=3, column=0, padx=5)
-            tk.Label(st, text=res[0][1], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=3, column=1, padx=5)
+                tk.Label(st, text='Cartões Amarelos: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=4, column=0, padx=5)
+                tk.Label(st, text=res[0][2], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=4, column=1, padx=5)
 
-            tk.Label(st, text='Cartões Amarelos: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=4, column=0, padx=5)
-            tk.Label(st, text=res[0][2], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=4, column=1, padx=5)
+                tk.Label(st, text='Cartões Vermelhos: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=5, column=0, padx=5)
+                tk.Label(st, text=res[0][3], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=5, column=1, padx=5)
 
-            tk.Label(st, text='Cartões Vermelhos: ', font='Ariel 12', bg='#4db8ff', fg='white').grid(row=5, column=0, padx=5)
-            tk.Label(st, text=res[0][3], font='Ariel 12', bg='#4db8ff', fg='white').grid(row=5, column=1, padx=5)
-
-            st.mainloop()
-        else:
-            messagebox.showwarning('Jogadores', 'Favor preencher todos os campos')
+                st.mainloop()
+            else:
+                messagebox.showwarning('Jogadores', 'Favor preencher todos os campos')
+        except:
+            print('Jogador ainda não está incluído na tabela player_match!')
 
     def __init__(self):
 

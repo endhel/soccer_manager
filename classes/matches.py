@@ -107,7 +107,7 @@ class Matches_dates():
     def write_record(self):
         if(self.Adversary_value.get() != "" and self.Date_value.get() != "" and self.Place_value.get() != "" and self.Tournament_value.get() != ""):
             aux = str(self.Result_value.get()).split()
-            if  len(aux) == 3 and aux[0].isnumeric and aux[2].isnumeric:
+            if  len(aux) == 3 and aux[0].isdecimal() and aux[2].isdecimal():
                 try:
                     self.theCursor.execute("""INSERT INTO Matches (Adversary, Date, Place, Tournament, Result, ID_team) VALUES(?,?,?,?,?,?) """, 
                     (self.Adversary_value.get(), self.Date_value.get(),  self.Place_value.get(), self.Tournament_value.get(), self.Result_value.get(), 1))
